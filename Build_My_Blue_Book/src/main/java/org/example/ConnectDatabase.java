@@ -10,11 +10,12 @@ public class ConnectDatabase {
 
     public final String url="jdbc:mysql://localhost:3306/LogInBlueBook?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true";
     public final String username="root";
-    public final String password ="1*********************************6";
+    public final String password ="123456";
 
     public static String name;
     public static String webName;
     public static String selfId;
+    //打开数据库
     public void open(String url,String username,String password){
         try{
             connection=DriverManager.getConnection(url,username,password);
@@ -35,15 +36,15 @@ public class ConnectDatabase {
         }
 
     }
-
-    public void connect(String url,String username,String password){
+    //展示所有用户的信息
+    public void showInformationOfUsers(String url, String username, String password){
         try{
             open(url, username, password);
             while(resultSet.next()){
+
                 name   =resultSet.getString("name");
                 webName=resultSet.getString("webName");
                 selfId =resultSet.getString("selfId");
-
 
                 System.out.println("姓名：    "+name);
                 System.out.println("网名：    "+webName);
@@ -52,7 +53,7 @@ public class ConnectDatabase {
         }catch(SQLException ec){
             System.out.println
                     ("数据库连接错误！位于方法->" +
-                            "connect(String url,String username,String password)->"+ec.getMessage());
+                            "showInformationOfUsers(String url,String username,String password)->"+ec.getMessage());
         }finally {
             off();
         }
