@@ -4,9 +4,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.sql.*;
+import java.util.InputMismatchException;
 import java.util.Objects;
+import java.util.Scanner;
 
 public class ConnectDatabase {
+
     private static final Logger log = LoggerFactory.getLogger(ConnectDatabase.class);
     static Connection connection;
     static PreparedStatement preparedStatement;
@@ -16,9 +19,14 @@ public class ConnectDatabase {
     public final String username="root";
     public final String password ="123456";
 
-    public static String name;
+    private static String name;
     public static String webName;
     public static String selfId;
+
+    public String getName(){
+        return name;
+    }
+
     //打开数据库
     public void open(String url,String username,String password){
         try{
@@ -64,6 +72,8 @@ public class ConnectDatabase {
             off();
         }
     }
+
+
     public boolean findAndJustify(String name, String yourInsertedSelfId){
         try{
             open(url,username,password);
@@ -71,16 +81,15 @@ public class ConnectDatabase {
             String selectRightInforId="select * from logInOfInformation where name= ? ";
 
             preparedStatement=connection.prepareStatement(selectRightInforId);
-
+            /**把实名的值放到这里**/
             preparedStatement.setString(1,name);
             resultSet= preparedStatement.executeQuery();
             while(resultSet.next()){
                 selfId=resultSet.getString("selfId");
                 ConnectDatabase.log.info("\r正在匹配中->{}", yourInsertedSelfId);
-                if(Objects.equals(yourInsertedSelfId,selfId)) break;
-                else return false;
+                if(Objects.equals(yourInsertedSelfId,selfId)) return true;
             }
-            return true;
+            return false;
         }catch(SQLException efj){
             ConnectDatabase.log.info
                     ("查询与比较方法异常！" +
@@ -90,5 +99,43 @@ public class ConnectDatabase {
             off();
         }
         return false;
+    }
+    Scanner scanner=new Scanner(System.in);
+
+
+    //检测姓名与登录的姓名是否一直，(如果一致，展示身份证信息)
+    public void showPersonalInformation() {
+        try {
+            log.info("请输入你的姓名：");
+            String yourAddedName = scanner.next().trim();
+
+            if(!Objects.equals(yourAddedName, LogInTest.addedName)) {
+                log.error("填写的姓名不正确！");
+                return;
+            }
+            log.info("姓名信息正确！");
+
+            String sql = "select * from logInOfInformation where name = ?";
+
+            try (Connection conn = DriverManager.getConnection(url, username, password);
+                 PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+                pstmt.setString(1, yourAddedName);
+
+                try (ResultSet rs = pstmt.executeQuery()) {
+                    if (rs.next()) {
+                        long realSelfId = rs.getLong("selfId");
+                        String webName = rs.getString("webName");
+
+                        log.info("你的真实网名：{}", webName);
+                        log.info("展示的身份证号：{}", realSelfId);
+                    } else log.error("数据库中未找到该用户的信息！");
+                }
+            }
+        } catch(SQLException esi) {
+            log.error("数据库查询个人信息异常", esi);
+        } catch(InputMismatchException e) {
+            log.error("输入类型异常", e);
+        }
     }
 }

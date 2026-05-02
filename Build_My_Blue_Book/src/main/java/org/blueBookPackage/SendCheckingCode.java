@@ -56,9 +56,10 @@ public class SendCheckingCode {
                 setCheckingCode(resultSetOfCheck.getInt("checkingNumber"));
                 if(Objects.equals(yourAddedCheckingCode,getCheckingCode())) {
                     SendCheckingCode.log.info("输入正确！");
+                    c.showInformationOfUsers(c.url,c.username,c.password);
                     return true;
                 }
-                else System.out.println("验证码错误！");
+                else log.error("验证码错误！");
             }
         }catch(SQLException ec){
             log.error("判断验证码方法发生异常，位于方法-> justify(long phoneNumber,int checkingCode){}", ec.getMessage());

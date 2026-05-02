@@ -44,7 +44,11 @@ class LogInTest {
     public void show(Object obj){
         logger.info(obj.toString());
     }
-    //实名认证
+
+    //静态变量保存添加的姓名信息，用于其他类调用
+    public static String addedName;
+
+    //实名认证，三次失败就强行禁止实名，传输真实名称                            <-name
     public void logIn(){
         logger.info("======================================");
         logger.info("        【小蓝书 1.0】用户登录");
@@ -57,6 +61,9 @@ class LogInTest {
             while(count<3){
                 show("请输入姓名：");
                 setName(scannerOfLogIn.next().trim());
+
+                addedName=getName();
+
                 show("请输入身份证号：");
                 setSelfId(scannerOfLogIn.next().trim());
                 boolean justify=connectDatabase.findAndJustify(getName(),getSelfId());
@@ -100,11 +107,16 @@ class LogInTest {
     }
 
     public static void test(){
-        System.out.println("欢迎光临我们的小蓝书！");
+        logger.info("欢迎光临我们的小蓝书！");
         LogInTest logIn=new LogInTest();
 
-        //logIn.logIn();
-        logIn.checkCode();
+        logIn.logIn();
+        //logIn.checkCode();
+    }
+    static ShowPersonalInformation showPersonalInformation=new ShowPersonalInformation();
+    public static void showPersonalInformationOnLogInTest(){
+        LogInTest logInShow=new LogInTest();
+        showPersonalInformation.show();
     }
 
 }
