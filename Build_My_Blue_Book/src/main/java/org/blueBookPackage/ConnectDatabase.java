@@ -10,7 +10,7 @@ import java.util.Scanner;
 
 public class ConnectDatabase {
 
-    private static final Logger log = LoggerFactory.getLogger(ConnectDatabase.class);
+    public static final Logger log = LoggerFactory.getLogger(ConnectDatabase.class);
     static Connection connection;
     static PreparedStatement preparedStatement;
     static ResultSet resultSet;
@@ -73,7 +73,7 @@ public class ConnectDatabase {
         }
     }
 
-
+    //查询实名信息
     public boolean findAndJustify(String name, String yourInsertedSelfId){
         try{
             open(url,username,password);
@@ -101,6 +101,8 @@ public class ConnectDatabase {
         return false;
     }
     Scanner scanner=new Scanner(System.in);
+    //共享信息->保持身份证信息不变
+    public static String foundSelfId;
 
 
     //检测姓名与登录的姓名是否一直，(如果一致，展示身份证信息)
@@ -108,27 +110,22 @@ public class ConnectDatabase {
         try {
             log.info("请输入你的姓名：");
             String yourAddedName = scanner.next().trim();
-
             if(!Objects.equals(yourAddedName, LogInTest.addedName)) {
                 log.error("填写的姓名不正确！");
                 return;
             }
             log.info("姓名信息正确！");
-
             String sql = "select * from logInOfInformation where name = ?";
-
             try (Connection conn = DriverManager.getConnection(url, username, password);
                  PreparedStatement pstmt = conn.prepareStatement(sql)) {
-
                 pstmt.setString(1, yourAddedName);
-
                 try (ResultSet rs = pstmt.executeQuery()) {
                     if (rs.next()) {
-                        long realSelfId = rs.getLong("selfId");
-                        String webName = rs.getString("webName");
-
-                        log.info("你的真实网名：{}", webName);
-                        log.info("展示的身份证号：{}", realSelfId);
+                        //共享的身份证信息，方便以后调用
+                        foundSelfId= rs.getString("selfId");
+                        log.info("你的真实网名：{}", BuildWebName.webName);
+                        log.info("展示的身份证号：{}", foundSelfId);
+                        log.info("注册的手机号：{}",SendCheckingCode.addedPhoneNumber);
                     } else log.error("数据库中未找到该用户的信息！");
                 }
             }

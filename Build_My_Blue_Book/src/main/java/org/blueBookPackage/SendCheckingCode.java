@@ -9,7 +9,7 @@ import java.util.Scanner;
 //发送验证码类
 public class SendCheckingCode {
 
-    private static final Logger log = LoggerFactory.getLogger(SendCheckingCode.class);
+    public static final Logger log = LoggerFactory.getLogger(SendCheckingCode.class);
     Scanner scannerOfCheck=new Scanner(System.in);
 
     private long phoneNumber;
@@ -28,6 +28,8 @@ public class SendCheckingCode {
         this.checkingCode=checkingCode;
     }
 
+    //共享信息->电话号保持不变
+    public static long addedPhoneNumber;
 
     Connection connectionOfCheck;
     PreparedStatement preparedStatementOfCheck;
@@ -37,6 +39,8 @@ public class SendCheckingCode {
 
     public boolean justify(long phoneNumber){
         try{
+            setPhoneNumber(phoneNumber);
+            addedPhoneNumber=getPhoneNumber();
             c.open(c.url,c.username,c.password);
             //随机生成4个数字
             String sqlOfCheck="select checkingNumber " +
@@ -45,7 +49,7 @@ public class SendCheckingCode {
             connectionOfCheck=DriverManager.getConnection(c.url,c.username,c.password);
             preparedStatementOfCheck=connectionOfCheck.prepareStatement(sqlOfCheck);
 
-            preparedStatementOfCheck.setLong(1, phoneNumber);
+            preparedStatementOfCheck.setLong(1, addedPhoneNumber);
             resultSetOfCheck=preparedStatementOfCheck.executeQuery();
 
             log.debug("输入验证码：");
@@ -56,7 +60,6 @@ public class SendCheckingCode {
                 setCheckingCode(resultSetOfCheck.getInt("checkingNumber"));
                 if(Objects.equals(yourAddedCheckingCode,getCheckingCode())) {
                     SendCheckingCode.log.info("输入正确！");
-                    c.showInformationOfUsers(c.url,c.username,c.password);
                     return true;
                 }
                 else log.error("验证码错误！");
@@ -67,12 +70,5 @@ public class SendCheckingCode {
             c.off();
         }
         return false;
-    }
-    public static void main(String[]asd){
-        Scanner scanner=new Scanner(System.in);
-        log.debug("输入手机号");
-        long p=scanner.nextLong();
-        SendCheckingCode s=new SendCheckingCode();
-        System.out.println(s.justify(p));
     }
 }

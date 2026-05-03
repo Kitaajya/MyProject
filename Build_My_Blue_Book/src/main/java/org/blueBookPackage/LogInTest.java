@@ -45,13 +45,13 @@ class LogInTest {
         logger.info(obj.toString());
     }
 
-    //静态变量保存添加的姓名信息，用于其他类调用
+    //共享信息->静态变量保存添加的姓名信息，用于其他类调用
     public static String addedName;
 
     //实名认证，三次失败就强行禁止实名，传输真实名称                            <-name
     public void logIn(){
         logger.info("======================================");
-        logger.info("        【小蓝书 1.0】用户登录");
+        logger.info("        【小蓝书 1.2.1】用户登录");
         logger.info("    本APP模仿小红书而制作！");
         logger.info("======================================");
         logger.info("使用前必须实名认证！");
@@ -62,7 +62,7 @@ class LogInTest {
                 show("请输入姓名：");
                 setName(scannerOfLogIn.next().trim());
 
-                addedName=getName();
+                addedName=getName();            //把名传到这里
 
                 show("请输入身份证号：");
                 setSelfId(scannerOfLogIn.next().trim());
@@ -88,6 +88,7 @@ class LogInTest {
     //验证码
     public void checkCode(){
         try{
+            logger.info("查询验证码：");
             long phoneNumber;
             show("请输入手机号：");
             phoneNumber = scannerOfLogIn.nextLong();
@@ -111,13 +112,17 @@ class LogInTest {
         LogInTest logIn=new LogInTest();
 
         logIn.logIn();
+        //验证码
+        logIn.checkCode();
         //logIn.checkCode();
     }
-    static ShowPersonalInformation showPersonalInformation=new ShowPersonalInformation();
+    /*
     public static void showPersonalInformationOnLogInTest(){
         LogInTest logInShow=new LogInTest();
         showPersonalInformation.show();
     }
+    */
+
 
 }
 
