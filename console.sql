@@ -1,32 +1,45 @@
-create database if not exists LogInBlueBook;
-use LogInBlueBook;
-drop table if exists logInOfInformation;
-create table if not exists logInOfInformation(
-    name varchar(10),     /*用户本名*/
-    webName varchar(10),  /*用户网名*/
-    selfId varchar(18)     /*身份证号*/
-);
-drop table if exists checkAndJustify;
-create table if not exists checkAndJustify(
-          phoneNumber bigint(11) primary key,/*手机号*/
-          checkingNumber int(4)not null  ,    /*验证码*/
-          effectTime timestamp default current_timestamp/*有效时间*/
-);
-insert into checkAndJustify(phoneNumber, checkingNumber) values (15175601727,
-                                                               floor(rand() * 10000));
-select checkingNumber from checkAndJustify;
-/*删除超时的验证码*/
-delete from checkAndJustify where timestampdiff(second,effectTime,now())>=60;
+-- 创建数据库
+CREATE DATABASE IF NOT EXISTS restaurant DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+USE restaurant;
 
+-- ======================
+-- 1. 用户系统实体
+-- ======================
+CREATE TABLE if not exists user_system (
+                             user_id INT PRIMARY KEY AUTO_INCREMENT COMMENT '用户ID',
+                             username VARCHAR(50) NOT NULL COMMENT '用户名',
+                             user_type ENUM('新用户','老用户','VIP','高级VIP','SVIP') NOT NULL COMMENT '用户类型'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='用户系统',auto_increment=20250001;
 
-INSERT INTO logInOfInformation (name, webName, selfId) VALUES
-                        ('张伟',null,'110101199503124518'),
-                        ('李娜',null,'310105199807213629'),
-                        ('王浩',null,'440306200011057836'),
-                        ('刘婷',null,'510104199902189257'),
-                        ('陈明',null,'330103199709091462'),
-                        ('杨雨',null,'610102200106305713'),
-                        ('赵宇',null,'320106199604158925'),
-                        ('黄欣',null,'420107199908226341'),
-                        ('周杰',null,'530105200201194876'),
-                        ('吴悦',null,'120104199805273594');
+-- ======================
+-- 2. 饭店实体
+-- ======================
+CREATE TABLE if not exists restaurant (
+                            restaurant_id INT PRIMARY KEY AUTO_INCREMENT COMMENT '饭店ID',
+                            restaurant_name VARCHAR(100) NOT NULL COMMENT '饭店名称',
+                            food_material VARCHAR(200) COMMENT '食材',
+                            cost DECIMAL(12,2) DEFAULT 0.00 COMMENT '成本',
+                            staff_salary DECIMAL(12,2) DEFAULT 0.00 COMMENT '员工工资',
+                            upper_class_num INT DEFAULT 0 COMMENT '上层阶级数量',
+                            staff_num INT DEFAULT 0 COMMENT '员工数量',
+                            profit DECIMAL(15,2) DEFAULT 0.00 COMMENT '获利'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='饭店';
+
+-- ======================
+-- 3. 供应关系（ER图中间菱形）
+-- ======================
+CREATE TABLE if not exists supply_relation (
+                                 id INT PRIMARY KEY AUTO_INCREMENT COMMENT '关系ID',
+                                 user_id INT NOT NULL COMMENT '用户ID',
+                                 restaurant_id INT NOT NULL COMMENT '饭店ID',
+
+    -- 外键关联
+                                 FOREIGN KEY (user_id) REFERENCES user_system(user_id) ON DELETE CASCADE,
+                                 FOREIGN KEY (restaurant_id) REFERENCES restaurant(restaurant_id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='供应关系';
+
+INSERT INTO user_system(username, user_type) VALUES (
+
+            '林安',
+                    '新用户'
+                               );
