@@ -1,0 +1,16 @@
+E:\新C#\RFID测试\TestHomeWork1\bin\Debug\net10.0-windows\TestHomeWork1.exe
+E:\新C#\RFID测试\TestHomeWork1\bin\Debug\net10.0-windows\TestHomeWork1.deps.json
+E:\新C#\RFID测试\TestHomeWork1\bin\Debug\net10.0-windows\TestHomeWork1.runtimeconfig.json
+E:\新C#\RFID测试\TestHomeWork1\bin\Debug\net10.0-windows\TestHomeWork1.dll
+E:\新C#\RFID测试\TestHomeWork1\bin\Debug\net10.0-windows\TestHomeWork1.pdb
+E:\新C#\RFID测试\TestHomeWork1\obj\Debug\net10.0-windows\TestHomeWork1.Form1.resources
+E:\新C#\RFID测试\TestHomeWork1\obj\Debug\net10.0-windows\TestHomeWork1.csproj.GenerateResource.cache
+E:\新C#\RFID测试\TestHomeWork1\obj\Debug\net10.0-windows\TestHomeWork1.GeneratedMSBuildEditorConfig.editorconfig
+E:\新C#\RFID测试\TestHomeWork1\obj\Debug\net10.0-windows\TestHomeWork1.AssemblyInfoInputs.cache
+E:\新C#\RFID测试\TestHomeWork1\obj\Debug\net10.0-windows\TestHomeWork1.AssemblyInfo.cs
+E:\新C#\RFID测试\TestHomeWork1\obj\Debug\net10.0-windows\TestHomeWork1.csproj.CoreCompileInputs.cache
+E:\新C#\RFID测试\TestHomeWork1\obj\Debug\net10.0-windows\TestHomeWork1.dll
+E:\新C#\RFID测试\TestHomeWork1\obj\Debug\net10.0-windows\refint\TestHomeWork1.dll
+E:\新C#\RFID测试\TestHomeWork1\obj\Debug\net10.0-windows\TestHomeWork1.pdb
+E:\新C#\RFID测试\TestHomeWork1\obj\Debug\net10.0-windows\TestHomeWork1.genruntimeconfig.cache
+E:\新C#\RFID测试\TestHomeWork1\obj\Debug\net10.0-windows\ref\TestHomeWork1.dll
